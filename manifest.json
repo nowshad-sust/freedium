@@ -1,0 +1,27 @@
+{
+  "name": "Freedium | Free Medium",
+  "version": "1.0",
+  "description": "An extension which enables you to read medium.com for free via incognito.",
+  "manifest_version": 2,
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "page_action": {
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://medium.com/*"],
+      "js": ["background.js"]
+    }
+  ],
+  "web_accessible_resources": [
+    "js/*",
+    "html/*",
+    "css/*",
+    "img/*",
+    "https://medium.com/*"
+  ]
+}
