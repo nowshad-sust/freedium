@@ -9,8 +9,11 @@
     "storage"
   ],
   "page_action": {
-    "default_icon": "icon.png",
+    "default_icon": "icon-128.png",
     "default_popup": "popup.html"
+  },
+  "icons": {
+   "128": "icon-128.png"
   },
   "content_scripts": [
     {
