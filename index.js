@@ -8,9 +8,12 @@
     const parentContainer =
       dom.closest(".extremeHero-postContent") ||
       dom.closest(".extremePostPreview-post") ||
-      dom.closest("li.u-flex.u-marginBottom24");
+      dom.closest("li.u-flex.u-marginBottom24") ||
+      dom.parentNode; // for click on images
 
-    return !!parentContainer.querySelector(".svgIcon--star");
+    return parentContainer
+      ? !!parentContainer.querySelector(".svgIcon--star")
+      : false;
   };
 
   const redirect = url => {
@@ -37,7 +40,6 @@
       e.target.className.includes("extremeHero-image")
     ) {
       // the click is on the title image
-      // NOT WORKING
       if (isPaidArticle(e.target)) {
         incognito(e.target.href);
       } else {
