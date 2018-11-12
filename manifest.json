@@ -18,7 +18,8 @@
   "content_scripts": [
     {
       "matches": ["https://medium.com/*"],
-      "js": ["index.js"]
+      "js": ["index.js"],
+      "run_at": "document_end"
     }
   ],
   "background": {

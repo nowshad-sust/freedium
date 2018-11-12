@@ -1,6 +1,19 @@
 (() => {
-  const incognito = url => {
-    chrome.runtime.sendMessage({ url });
+  const openURL = (url, method) => {
+    try {
+      chrome.runtime.sendMessage({ url, method });
+    } catch (e) {
+      if (
+        e.message.match(/Invocation of form runtime\.connect/) &&
+        e.message.match(/doesn't match definition runtime\.connect/)
+      ) {
+        console.error(
+          "Chrome extension, Actson has been reloaded. Please refresh the page"
+        );
+      } else {
+        throw e;
+      }
+    }
   };
 
   const isPaidArticle = dom => {
@@ -16,10 +29,6 @@
       : false;
   };
 
-  const redirect = url => {
-    window.location.replace(url);
-  };
-
   const openWithIncognito = e => {
     e.preventDefault();
     e.stopPropagation();
@@ -31,9 +40,9 @@
     ) {
       // the click is on the title/subtitle
       if (isPaidArticle(e.target)) {
-        incognito(e.target.parentNode.href);
+        openURL(e.target.parentNode.href, "incognito");
       } else {
-        redirect(e.target.parentNode.href);
+        openURL(e.target.parentNode.href, "tab");
       }
     } else if (
       e.target.href &&
@@ -41,20 +50,25 @@
     ) {
       // the click is on the title image
       if (isPaidArticle(e.target)) {
-        incognito(e.target.href);
+        openURL(e.target.href, "incognito");
       } else {
-        redirect(e.target.href);
+        openURL(e.target.href, "tab");
       }
     } else if (e.target.href) {
-      redirect(e.target.href);
+      openURL(e.target.href, "tab");
     } else {
       return true;
     }
     return false;
   };
-
+  try {
+    const homeContainer = document.getElementsByClassName("homeContainer")[0];
+    homeContainer.addEventListener("click", openWithIncognito);
+  } catch (e) {
+    setTimeout(() => {
+      const homeContainer = document.getElementsByClassName("homeContainer")[0];
+      homeContainer.addEventListener("click", openWithIncognito);
+    }, 5000);
+  }
   console.log("Initialized Freedium");
-
-  const homeContainer = document.getElementsByClassName("homeContainer")[0];
-  homeContainer.addEventListener("click", openWithIncognito);
 })();
